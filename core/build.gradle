@@ -7,5 +7,6 @@ dependencies {
 	api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 	api "io.github.libktx:ktx-app:$ktxVersion"
 	api "io.github.libktx:ktx-log:$ktxVersion"
+	api "io.github.libktx:ktx-graphics:$ktxVersion"
 
 }
