@@ -1,30 +1,26 @@
 package axehigh
 
-import com.badlogic.gdx.ApplicationAdapter
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import axehigh.screen.FirstScreen
+import axehigh.screen.SecondScreen
+import com.badlogic.gdx.Application.LOG_DEBUG
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Texture
+import ktx.app.KtxGame
+import ktx.app.KtxScreen
+import ktx.log.Logger
+import ktx.log.logger
 
-/** [com.badlogic.gdx.ApplicationListener] implementation shared by all platforms.  */
-class SilverBullet : ApplicationAdapter() {
-    private var batch: SpriteBatch? = null
-    private var image: Texture? = null
+private val LOG: Logger = logger<SilverBullet>()
+
+class SilverBullet : KtxGame<KtxScreen>() {
     override fun create() {
-        batch = SpriteBatch()
-        image = Texture("libgdx.png")
+        Gdx.app.logLevel = LOG_DEBUG
+        LOG.debug { "Silverbullet starts" }
+        addScreen(FirstScreen(this))
+        addScreen(SecondScreen(this))
+        setScreen<FirstScreen>()
     }
 
-    override fun render() {
-        Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        batch!!.begin()
-        batch!!.draw(image, 140f, 210f)
-        batch!!.end()
-    }
-
-    override fun dispose() {
-        batch!!.dispose()
-        image!!.dispose()
-    }
 }
+
+
+
