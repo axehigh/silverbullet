@@ -2,11 +2,17 @@ package axehigh.screen
 
 import axehigh.SilverBullet
 import axehigh.UNIT_SCALE
+import axehigh.ecs.component.GraphicComponent
+import axehigh.ecs.component.TransformComponent
+import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.utils.viewport.FitViewport
+import ktx.ashley.entity
+import ktx.ashley.get
+import ktx.ashley.with
 import ktx.graphics.use
 import ktx.log.Logger
 import ktx.log.logger
@@ -15,21 +21,35 @@ private val LOG: Logger = logger<GameScreen>()
 
 class GameScreen(game: SilverBullet, batch: Batch) : SilverBulletScreen(game, batch) {
 
+    private val playerTexture = Texture(Gdx.files.internal("ship_base.png"))
     private val viewPort = FitViewport(9f, 16f)
-    private val texture = Texture(Gdx.files.internal("ship_base.png"))
-    private val sprite = Sprite(texture).apply { setSize(9/16f,10/16f) }
+
+    private val player:Entity = game.engine.entity {
+        with<TransformComponent>{
+            position.set(1f,1f,0f)
+
+        }
+        with<GraphicComponent>{
+            sprite.run{
+                setRegion(playerTexture)
+                setSize(texture.width* UNIT_SCALE, texture.height* UNIT_SCALE)
+                setOriginCenter()
+            }
+        }
+    }
 
     override fun show() {
         LOG.debug { "First Screen" }
-//        sprite.setPosition(9* UNIT_SCALE, 10* UNIT_SCALE)
-        sprite.setPosition(1f, 1f)
-//        sprite.setScale(0.1f)
     }
 
     override fun render(delta: Float) {
+        engine.update(delta)
+
+
+
         viewPort.apply()
         batch.use(viewPort.camera.combined) {
-            sprite.draw(it)
+            player[GraphicComponent.mapper]?.sprite?.draw(it)
         }
 
         //UI Viewport.apply()
@@ -41,7 +61,7 @@ class GameScreen(game: SilverBullet, batch: Batch) : SilverBulletScreen(game, ba
     }
 
     override fun dispose() {
-        texture.dispose();
+        playerTexture.dispose();
     }
 
 }

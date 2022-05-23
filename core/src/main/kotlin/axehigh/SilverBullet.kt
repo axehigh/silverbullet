@@ -2,6 +2,8 @@ package axehigh
 
 import axehigh.screen.SilverBulletScreen
 import axehigh.screen.GameScreen
+import com.badlogic.ashley.core.Engine
+import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.Application.LOG_DEBUG
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
@@ -11,11 +13,12 @@ import ktx.log.Logger
 import ktx.log.logger
 
 private val LOG: Logger = logger<SilverBullet>()
-const val UNIT_SCALE : Float = 1/16f
+const val UNIT_SCALE: Float = 1 / 16f
 
 class SilverBullet : KtxGame<SilverBulletScreen>() {
 
     val batch: Batch by lazy { SpriteBatch() }
+    val engine: Engine by lazy { PooledEngine() }
 
     override fun create() {
         Gdx.app.logLevel = LOG_DEBUG
@@ -26,7 +29,7 @@ class SilverBullet : KtxGame<SilverBulletScreen>() {
 
     override fun dispose() {
         super.dispose()
-        LOG.debug{"Sprites in batch: ${(batch as SpriteBatch).maxSpritesInBatch}"}
+        LOG.debug { "Sprites in batch: ${(batch as SpriteBatch).maxSpritesInBatch}" }
         batch.dispose()
     }
 
