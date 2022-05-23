@@ -15,7 +15,7 @@ fun main() {
         //// useful for testing performance, but can also be very stressful to some hardware.
         //// You may also need to configure GPU drivers to fully disable Vsync; this can cause screen tearing.
 
-        setWindowedMode(640, 480)
+        setWindowedMode(9*32, 16*32)
         setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png")
     })
 }
