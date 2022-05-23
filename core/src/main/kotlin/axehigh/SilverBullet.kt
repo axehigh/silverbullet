@@ -1,5 +1,7 @@
 package axehigh
 
+import axehigh.ecs.system.PlayerAnimationSystem
+import axehigh.ecs.system.PlayerInputSystem
 import axehigh.ecs.system.RenderSystems
 import axehigh.screen.DarkMatterScreen
 import axehigh.screen.GameScreen
@@ -7,8 +9,10 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.Application.LOG_DEBUG
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.viewport.FitViewport
 import ktx.app.KtxGame
 import ktx.log.Logger
@@ -21,8 +25,14 @@ class SilverBullet : KtxGame<DarkMatterScreen>() {
     val gameViewPort = FitViewport(9f, 16f)
     val batch: Batch by lazy { SpriteBatch() }
 
+    private val defaultRegion:TextureRegion by lazy { TextureRegion(Texture(Gdx.files.internal("ship_base.png")))}
+    private val leftRegion:TextureRegion by lazy { TextureRegion(Texture(Gdx.files.internal("ship_left.png")))}
+    private val rightRegion:TextureRegion by lazy { TextureRegion(Texture(Gdx.files.internal("ship_right.png")))}
+
     val engine: Engine by lazy {
         PooledEngine().apply {
+            addSystem(PlayerInputSystem(gameViewPort))
+            addSystem(PlayerAnimationSystem(defaultRegion, leftRegion, rightRegion))
             addSystem(RenderSystems(batch, gameViewPort))
         }
     }
@@ -38,6 +48,12 @@ class SilverBullet : KtxGame<DarkMatterScreen>() {
         super.dispose()
         LOG.debug { "Sprites in batch: ${(batch as SpriteBatch).maxSpritesInBatch}" }
         batch.dispose()
+
+        // will be improved with assetmanager
+        defaultRegion.texture.dispose()
+        rightRegion.texture.dispose()
+        leftRegion.texture.dispose()
+
     }
 
 }

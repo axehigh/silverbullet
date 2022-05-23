@@ -43,7 +43,10 @@ class RenderSystems(
 
         if (graphic.sprite.texture == null) {
             LOG.error { "Entity has no texture for rendering. entity = $entity" }
+            // Could keep going
             return
+            // could
+            //throw GdxRuntimeException("")
         }
 
         graphic.sprite.run {
