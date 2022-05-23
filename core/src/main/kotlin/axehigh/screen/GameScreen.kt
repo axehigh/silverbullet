@@ -8,57 +8,56 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.utils.viewport.FitViewport
+import com.badlogic.gdx.math.MathUtils
 import ktx.ashley.entity
-import ktx.ashley.get
 import ktx.ashley.with
-import ktx.graphics.use
 import ktx.log.Logger
 import ktx.log.logger
 
 private val LOG: Logger = logger<GameScreen>()
 
-class GameScreen(game: SilverBullet, batch: Batch) : SilverBulletScreen(game, batch) {
+class GameScreen(game: SilverBullet, batch: Batch) : DarkMatterScreen(game, batch) {
 
     private val playerTexture = Texture(Gdx.files.internal("ship_base.png"))
-    private val viewPort = FitViewport(9f, 16f)
 
-    private val player:Entity = game.engine.entity {
-        with<TransformComponent>{
-            position.set(1f,1f,0f)
 
-        }
-        with<GraphicComponent>{
-            sprite.run{
-                setRegion(playerTexture)
-                setSize(texture.width* UNIT_SCALE, texture.height* UNIT_SCALE)
-                setOriginCenter()
+//    private val player:Entity = game.engine.entity {
+//        with<TransformComponent>{
+//            position.set(1f,1f,0f)
+//
+//        }
+//        with<GraphicComponent>{
+//            sprite.run{
+//                setRegion(playerTexture)
+//                setSize(texture.width* UNIT_SCALE, texture.height* UNIT_SCALE)
+//                setOriginCenter()
+//            }
+//        }
+//    }
+
+    override fun show() {
+        LOG.debug { "First Screen" }
+        repeat(10) {
+            engine.entity{
+                with<TransformComponent>{
+                    position.set(MathUtils.random(0f,9f),MathUtils.random(0f,16f),0f)
+
+                }
+                with<GraphicComponent>{
+                    sprite.run{
+                        setRegion(playerTexture)
+                        setSize(texture.width* UNIT_SCALE, texture.height* UNIT_SCALE)
+                        setOriginCenter()
+                    }
+                }
             }
         }
     }
 
-    override fun show() {
-        LOG.debug { "First Screen" }
-    }
-
     override fun render(delta: Float) {
         engine.update(delta)
-
-
-
-        viewPort.apply()
-        batch.use(viewPort.camera.combined) {
-            player[GraphicComponent.mapper]?.sprite?.draw(it)
-        }
-
-        //UI Viewport.apply()
-
     }
 
-    override fun resize(width: Int, height: Int) {
-        viewPort.update(width, height, true)
-    }
 
     override fun dispose() {
         playerTexture.dispose();

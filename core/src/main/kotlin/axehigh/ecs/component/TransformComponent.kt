@@ -7,22 +7,27 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Pool
 import ktx.ashley.mapperFor
 
-class TransformComponent : Component, Pool.Poolable {
+class TransformComponent : Component, Pool.Poolable, Comparable<TransformComponent> {
 
     val position = Vector3()
-    val size = Vector2(1f,1f)
+    val size = Vector2(1f, 1f)
     var rotationDeg = 0f
 
     override fun reset() {
         position.set(Vector3.Zero)
-        size.set(Vector2(1f,1f))
+        size.set(Vector2(1f, 1f))
         rotationDeg = 0f
+    }
+
+    override fun compareTo(other: TransformComponent): Int {
+        val zDiff: Float = position.z - other.position.z
+        return (if (zDiff == 0f) position.y - other.position.y else zDiff).toInt()
     }
 
     // companion is static
     // can cause problems on android, static is removed first by GC.
-    companion object{
-        val mapper:ComponentMapper<TransformComponent> = mapperFor<TransformComponent>()
+    companion object {
+        val mapper: ComponentMapper<TransformComponent> = mapperFor<TransformComponent>()
     }
 
 }
