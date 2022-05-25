@@ -20,16 +20,16 @@ class GameScreen(game: SilverBullet, batch: Batch) : DarkMatterScreen(game, batc
     override fun show() {
         LOG.debug { "First Screen" }
 //        repeat(10) {
-            engine.entity{
-                with<TransformComponent>{
+        engine.entity {
+            with<TransformComponent> {
 //                    position.set(MathUtils.random(0f,9f),MathUtils.random(0f,16f),0f)
-                    position.set(1f,1f,0f)
-                }
-
-                with<GraphicComponent>()
-                with<PlayerComponent>()
-                with<FacingComponent>()
+                position.set(4f, 9f, 0f)
             }
+            with<MoveComponent>()
+            with<GraphicComponent>()
+            with<PlayerComponent>()
+            with<FacingComponent>()
+        }
 //        }
     }
 

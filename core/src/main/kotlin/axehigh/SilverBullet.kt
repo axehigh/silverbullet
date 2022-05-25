@@ -1,8 +1,6 @@
 package axehigh
 
-import axehigh.ecs.system.PlayerAnimationSystem
-import axehigh.ecs.system.PlayerInputSystem
-import axehigh.ecs.system.RenderSystems
+import axehigh.ecs.system.*
 import axehigh.screen.DarkMatterScreen
 import axehigh.screen.GameScreen
 import com.badlogic.ashley.core.Engine
@@ -21,15 +19,18 @@ import ktx.log.logger
 
 private val LOG: Logger = logger<SilverBullet>()
 const val UNIT_SCALE: Float = 1 / 16f
+const val V_WIDTH = 9
+const val V_HEIGHT = 16
 
 class SilverBullet : KtxGame<DarkMatterScreen>() {
-    val gameViewPort = FitViewport(9f, 16f)
+    val gameViewPort = FitViewport(V_WIDTH.toFloat(), V_HEIGHT.toFloat())
     val batch: Batch by lazy { SpriteBatch() }
 
-    val graphicsAtlas by lazy { TextureAtlas(Gdx.files.internal("assets.atlas")) }
+    val graphicsAtlas by lazy { TextureAtlas(Gdx.files.internal("graphics.atlas")) }
     val engine: Engine by lazy {
         PooledEngine().apply {
             addSystem(PlayerInputSystem(gameViewPort))
+            addSystem(MoveSystem())
             addSystem(
                 PlayerAnimationSystem(
                     graphicsAtlas.findRegion("ship_base"),
@@ -38,6 +39,7 @@ class SilverBullet : KtxGame<DarkMatterScreen>() {
                 )
             )
             addSystem(RenderSystems(batch, gameViewPort))
+            addSystem(RemoveSystem())
         }
     }
 
