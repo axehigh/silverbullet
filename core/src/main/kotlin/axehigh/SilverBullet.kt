@@ -12,6 +12,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.viewport.FitViewport
 import ktx.app.KtxGame
@@ -25,14 +26,17 @@ class SilverBullet : KtxGame<DarkMatterScreen>() {
     val gameViewPort = FitViewport(9f, 16f)
     val batch: Batch by lazy { SpriteBatch() }
 
-    private val defaultRegion:TextureRegion by lazy { TextureRegion(Texture(Gdx.files.internal("ship_base.png")))}
-    private val leftRegion:TextureRegion by lazy { TextureRegion(Texture(Gdx.files.internal("ship_left.png")))}
-    private val rightRegion:TextureRegion by lazy { TextureRegion(Texture(Gdx.files.internal("ship_right.png")))}
-
+    val graphicsAtlas by lazy { TextureAtlas(Gdx.files.internal("assets.atlas")) }
     val engine: Engine by lazy {
         PooledEngine().apply {
             addSystem(PlayerInputSystem(gameViewPort))
-            addSystem(PlayerAnimationSystem(defaultRegion, leftRegion, rightRegion))
+            addSystem(
+                PlayerAnimationSystem(
+                    graphicsAtlas.findRegion("ship_base"),
+                    graphicsAtlas.findRegion("ship_left"),
+                    graphicsAtlas.findRegion("ship_right")
+                )
+            )
             addSystem(RenderSystems(batch, gameViewPort))
         }
     }
@@ -50,9 +54,8 @@ class SilverBullet : KtxGame<DarkMatterScreen>() {
         batch.dispose()
 
         // will be improved with assetmanager
-        defaultRegion.texture.dispose()
-        rightRegion.texture.dispose()
-        leftRegion.texture.dispose()
+
+        graphicsAtlas.dispose()
 
     }
 

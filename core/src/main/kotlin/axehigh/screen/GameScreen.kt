@@ -22,7 +22,8 @@ class GameScreen(game: SilverBullet, batch: Batch) : DarkMatterScreen(game, batc
 //        repeat(10) {
             engine.entity{
                 with<TransformComponent>{
-                    position.set(MathUtils.random(0f,9f),MathUtils.random(0f,16f),0f)
+//                    position.set(MathUtils.random(0f,9f),MathUtils.random(0f,16f),0f)
+                    position.set(1f,1f,0f)
                 }
 
                 with<GraphicComponent>()
