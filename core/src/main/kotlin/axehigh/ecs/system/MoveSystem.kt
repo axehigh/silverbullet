@@ -28,13 +28,30 @@ class MoveSystem : IteratingSystem(
     private var accumulator = 0f;
 
     override fun update(deltaTime: Float) {
-
-
         accumulator += deltaTime
         while (accumulator >= UPDATE_RATE) {
             accumulator -= UPDATE_RATE
-            super.update(deltaTime)
+
+            entities.forEach { entity ->
+                entity[TransformComponent.mapper]?.let { transform -> transform.prevPosition.set(transform.position) }
+            }
+            super.update(UPDATE_RATE)
         }
+
+        val alpha = accumulator / UPDATE_RATE
+        // update interpolation position
+        entities.forEach { entity ->
+            entity[TransformComponent.mapper]?.let { transform ->
+                transform.interPolationPosition.set(
+                    MathUtils.lerp(transform.prevPosition.x, transform.position.x, alpha),
+                    MathUtils.lerp(transform.prevPosition.y, transform.position.y, alpha),
+                    transform.position.z
+                )
+            }
+        }
+
+
+
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {

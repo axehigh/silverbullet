@@ -13,8 +13,10 @@ import ktx.ashley.entity
 import ktx.ashley.with
 import ktx.log.Logger
 import ktx.log.logger
+import kotlin.math.min
 
 private val LOG: Logger = logger<GameScreen>()
+private const val MAX_DELTA_TIME  = 1/20f
 
 class GameScreen(game: SilverBullet, batch: Batch) : DarkMatterScreen(game, batch) {
 
@@ -24,7 +26,8 @@ class GameScreen(game: SilverBullet, batch: Batch) : DarkMatterScreen(game, batc
         engine.entity {
             with<TransformComponent> {
 //                    position.set(MathUtils.random(0f,9f),MathUtils.random(0f,16f),0f)
-                position.set(4f, 9f, 0f)
+//                position.set(4f, 9f, 0f)
+                setInitialPosition(4f,9f,0f)
             }
             with<MoveComponent>()
             with<GraphicComponent>()
@@ -36,8 +39,8 @@ class GameScreen(game: SilverBullet, batch: Batch) : DarkMatterScreen(game, batc
 
     override fun render(delta: Float) {
         (game.batch as SpriteBatch).renderCalls = 0
-        engine.update(delta)
-        LOG.debug { "Rendercalls: $((game.batch as SpriteBatch)).renderCalls" }
+        engine.update(min(MAX_DELTA_TIME,delta))
+        LOG.debug { "Rendercalls: ${((game.batch as SpriteBatch)).renderCalls}" }
 //        if (Gdx.input.isKeyJustPressed())
     }
 

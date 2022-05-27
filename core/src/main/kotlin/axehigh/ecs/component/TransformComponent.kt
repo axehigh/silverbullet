@@ -10,6 +10,8 @@ import ktx.ashley.mapperFor
 class TransformComponent : Component, Pool.Poolable, Comparable<TransformComponent> {
 
     val position = Vector3()
+    val prevPosition = Vector3()
+    val interPolationPosition = Vector3()
     val size = Vector2(1f, 1f)
     var rotationDeg = 0f
 
@@ -17,6 +19,13 @@ class TransformComponent : Component, Pool.Poolable, Comparable<TransformCompone
         position.set(Vector3.Zero)
         size.set(Vector2(1f, 1f))
         rotationDeg = 0f
+    }
+
+    fun setInitialPosition(x:Float, y:Float, z:Float) {
+        position.set(x, y, z)
+        prevPosition.set(x, y, z)
+        interPolationPosition.set(x, y, z)
+
     }
 
     override fun compareTo(other: TransformComponent): Int {
