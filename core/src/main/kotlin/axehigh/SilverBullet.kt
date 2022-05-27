@@ -31,6 +31,7 @@ class SilverBullet : KtxGame<DarkMatterScreen>() {
         PooledEngine().apply {
             addSystem(PlayerInputSystem(gameViewPort))
             addSystem(MoveSystem())
+            addSystem(DamageSystem())
             addSystem(
                 PlayerAnimationSystem(
                     graphicsAtlas.findRegion("ship_base"),
@@ -40,6 +41,7 @@ class SilverBullet : KtxGame<DarkMatterScreen>() {
             )
             addSystem(RenderSystems(batch, gameViewPort))
             addSystem(RemoveSystem())
+            addSystem(DebugSystem())
         }
     }
 

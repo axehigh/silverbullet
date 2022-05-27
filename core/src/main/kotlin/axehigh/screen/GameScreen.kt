@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import ktx.ashley.entity
 import ktx.ashley.with
@@ -34,7 +35,10 @@ class GameScreen(game: SilverBullet, batch: Batch) : DarkMatterScreen(game, batc
     }
 
     override fun render(delta: Float) {
+        (game.batch as SpriteBatch).renderCalls = 0
         engine.update(delta)
+        LOG.debug { "Rendercalls: $((game.batch as SpriteBatch)).renderCalls" }
+//        if (Gdx.input.isKeyJustPressed())
     }
 
 
